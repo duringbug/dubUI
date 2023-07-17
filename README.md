@@ -27,7 +27,7 @@ Done.
 ```
 接下来你在控制台查看可输入网址(一般都是http://localhost:5173)
 
-## tailwindcss的加入
+## [tailwindcss的加入](./tailwindcss.md)
 ```
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
