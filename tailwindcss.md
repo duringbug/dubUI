@@ -1,8 +1,9 @@
-# vue3+ts:tailwindcss的配置项详解(长文警告)
+# vue3+ts:tailwindcss的配置项详解(theme主题配置篇)
 
 ## 配置文件
 直接上官方的默认配置代码，<span style="color:rgb(236, 72, 153)">注意content里的作用域</span>
 ```javascript
+/** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
@@ -1011,7 +1012,6 @@ export default {
 }
 
 ```
-接下来一一详解
 ## 强调色
 ```javascript
 accentColor: ({ theme }) => ({
@@ -4200,4 +4200,196 @@ transformOrigin 是 Tailwind CSS 中用于设置变换原点（transform origin�
       shadow: 'box-shadow',
       transform: 'transform',
     },
+```
+使用transition-{properties}指定哪些属性在更改时应进行转换。
+```html
+    <div class="flex justify-center items-center h-screen">
+        <div
+            class="transition hover:-translate-y-[200px] hover:rotate-12 w-[200px] aspect-square duration-150 bg-blue-500 hover:bg-orange-500">
+            transition
+        </div>
+    </div>
+    <div class="flex justify-center items-center h-screen">
+        <div
+            class="transition-colors hover:-translate-y-[200px] hover:rotate-12 w-[200px] aspect-square duration-150 bg-blue-500 hover:bg-orange-500">
+            transition-colors
+        </div>
+    </div>
+```
+
+## 变换曲线
+```javascript
+    transitionTimingFunction: {
+      DEFAULT: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      linear: 'linear',
+      in: 'cubic-bezier(0.4, 0, 1, 1)',
+      out: 'cubic-bezier(0, 0, 0.2, 1)',
+      'in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
+    },
+```
+使用ease-{timing}来控制元素的缓动曲线。
+<small>
+当使用 cubic-bezier(0.4, 0, 0.2, 1) 这个缓动函数时，它代表着一个动画的变化规律，含义如下：
+
+0.4：动画开始时，元素在水平方向上移动得相对较快为0.4。
+0：动画开始时，元素在垂直方向上保持静止，也就是不会上下移动为0。
+0.2：动画结束时，元素在水平方向上移动得相对较慢为0.2。
+1：动画结束时，元素在垂直方向上移动得相对较快为1。
+
+linear: 线性过渡函数，表示动画在整个过渡期间保持匀速运动，没有加速或减速效果。
+ease: 默认的缓动函数，也称为 ease-out，表示动画开始时较快，然后逐渐减慢到结束时。
+ease-in: 加速缓动函数，表示动画开始时较慢，然后逐渐加速到结束时。
+ease-out: 减速缓动函数，表示动画开始时较快，然后逐渐减慢到结束时，与 ease 是相反的效果。
+ease-in-out: 先加速后减速缓动函数，表示动画开始时较慢，然后逐渐加速到中间，再逐渐减慢到结束时。
+</small>
+
+
+```html
+    <div class="flex justify-center items-center h-screen">
+        <button class="border px-2 transition hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            DEFAULT
+        </button>
+
+        <button class="border px-2 transition ease-linear hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            ease-linear
+        </button>
+
+        <button class="border px-2 transition ease-in hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            ease-in
+        </button>
+
+        <button class="border px-2 transition ease-out hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            ease-out
+        </button>
+
+        <button class="border px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            ease-in-out
+        </button>
+        <button
+            class="border px-2 transition ease-[cubic-bezier(0.95,0.05,0.795,0.035)] hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            ease-[cubic-bezier(0.95,0.05,0.795,0.035)]
+        </button>
+    </div>
+```
+
+## 位移
+```javascript
+    translate: ({ theme }) => ({
+      ...theme('spacing'),
+      '1/2': '50%',
+      '1/3': '33.333333%',
+      '2/3': '66.666667%',
+      '1/4': '25%',
+      '2/4': '50%',
+      '3/4': '75%',
+      full: '100%',
+    }),
+```
+在 Tailwind CSS 中，translate 是一个配置项，用于定义元素在水平和垂直方向上的位移（平移）。它返回一个包含键值对的对象，其中键表示平移的大小，而值表示对应的平移数值。可以加负号。
+
+```html
+    <div class="hover:translate-x-1/2 transition">hover:translate-x-1/2</div>
+```
+
+## 宽度
+```javascript
+    width: ({ theme }) => ({
+      auto: 'auto',
+      ...theme('spacing'),
+      '1/2': '50%',
+      '1/3': '33.333333%',
+      '2/3': '66.666667%',
+      '1/4': '25%',
+      '2/4': '50%',
+      '3/4': '75%',
+      '1/5': '20%',
+      '2/5': '40%',
+      '3/5': '60%',
+      '4/5': '80%',
+      '1/6': '16.666667%',
+      '2/6': '33.333333%',
+      '3/6': '50%',
+      '4/6': '66.666667%',
+      '5/6': '83.333333%',
+      '1/12': '8.333333%',
+      '2/12': '16.666667%',
+      '3/12': '25%',
+      '4/12': '33.333333%',
+      '5/12': '41.666667%',
+      '6/12': '50%',
+      '7/12': '58.333333%',
+      '8/12': '66.666667%',
+      '9/12': '75%',
+      '10/12': '83.333333%',
+      '11/12': '91.666667%',
+      full: '100%',
+      screen: '100vw',
+      svw: '100svw',
+      lvw: '100lvw',
+      dvw: '100dvw',
+      min: 'min-content',
+      max: 'max-content',
+      fit: 'fit-content',
+    }),
+```
+<small>
+auto: 表示宽度自动根据内容来调整，常用于自适应布局。
+full: '100%'：表示元素的宽度为父容器的100%。
+screen: '100vw'：表示元素的宽度为视口宽度的100%。
+svw: '100svw'：表示元素的宽度为视口宽度的100%，不考虑滚动条的宽度。
+lvw: '100lvw'：表示元素的宽度为视口宽度的100%，包括滚动条的宽度。
+dvw: '100dvw'：表示元素的宽度为文档宽度的100%，包括溢出的内容。
+min: 'min-content'：表示元素宽度根据其内容的大小自动调整为最小值。
+max: 'max-content'：表示元素宽度根据其内容的大小自动调整为最大值。
+fit: 'fit-content'：表示元素宽度根据其内容的大小自动调整为适合的值。
+</small>
+
+## 动画优化
+```javascript
+    willChange: {
+      auto: 'auto',
+      scroll: 'scroll-position',
+      contents: 'contents',
+      transform: 'transform',
+    },
+```
+willChange 是 Tailwind CSS 中的一个自定义类别，用于设置 CSS 属性 will-change 的取值。will-change 属性用于告诉浏览器某个元素将要发生变化，以便浏览器优化相应的渲染操作。
+will-change 属性旨在作为处理已知性能问题时的最后手段。避免过多使用，或者仅仅因为预期会出现性能问题而使用，因为这实际上可能会导致页面性能降低。所以注意，will-change 属性具有一定的性能影响，应谨慎使用。只有在需要进行优化或通过显式指示以改善特定效果时才使用该属性。
+```html
+    <button class="hover:will-change-transform border px-2 transition ease-[cubic-bezier(0.95,0.05,0.795,0.035)] hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            will-change-transform
+    </button>
+```
+## 层叠顺序
+```javascript
+    zIndex: {
+      auto: 'auto',
+      0: '0',
+      10: '10',
+      20: '20',
+      30: '30',
+      40: '40',
+      50: '50',
+    },
+```
+在 Tailwind CSS 中，zIndex用于定义元素的层叠顺序（z-index）。
+
+```html
+    <div class="flex justify-center items-center h-screen  -space-x-8">
+        <div
+            class="border-4 transition hover:-translate-y-1 hover:scale-110 hover:z-50 z-40 w-[100px] aspect-square rounded-full bg-pink-500 flex flex-col justify-center items-center">
+            05</div>
+        <div
+            class="border-4 transition hover:-translate-y-1 hover:scale-110 hover:z-50 z-30 w-[100px] aspect-square rounded-full bg-pink-500 flex flex-col justify-center items-center">
+            04</div>
+        <div
+            class="border-4 transition hover:-translate-y-1 hover:scale-110 hover:z-50 z-20 w-[100px] aspect-square rounded-full bg-pink-500 flex flex-col justify-center items-center">
+            03</div>
+        <div
+            class="border-4 transition hover:-translate-y-1 hover:scale-110 hover:z-50 z-10 w-[100px] aspect-square rounded-full bg-pink-500 flex flex-col justify-center items-center">
+            02</div>
+        <div
+            class="border-4 transition hover:-translate-y-1 hover:scale-110 hover:z-50 z-0 w-[100px] aspect-square rounded-full bg-pink-500 flex flex-col justify-center items-center">
+            01</div>
+    </div>
 ```

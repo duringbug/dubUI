@@ -809,8 +809,65 @@
     </div>
 
     <div class="flex justify-center items-center h-screen">
-        <div class="hover:rotate-12 transition w-[200px] aspect-square duration-150 bg-blue-500 hover:bg-orange-500">
-            delay-700</div>
+        <div
+            class="transition hover:-translate-y-[200px] hover:rotate-12 w-[200px] aspect-square duration-150 bg-blue-500 hover:bg-orange-500">
+            transition
+        </div>
+    </div>
+    <div class="flex justify-center items-center h-screen">
+        <div
+            class="transition-colors hover:-translate-y-[200px] hover:rotate-12 w-[200px] aspect-square duration-150 bg-blue-500 hover:bg-orange-500">
+            transition-colors
+        </div>
+    </div>
+    <div class="flex justify-center items-center h-screen">
+        <button class="border px-2 transition hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            DEFAULT
+        </button>
+
+        <button class="border px-2 transition ease-linear hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            ease-linear
+        </button>
+
+        <button class="border px-2 transition ease-in hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            ease-in
+        </button>
+
+        <button class="border px-2 transition ease-out hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            ease-out
+        </button>
+
+        <button class="border px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            ease-in-out
+        </button>
+        <button
+            class="border px-2 transition ease-[cubic-bezier(0.95,0.05,0.795,0.035)] hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            ease-[cubic-bezier(0.95,0.05,0.795,0.035)]
+        </button>
+
+        <button
+            class="hover:will-change-transform border px-2 transition ease-[cubic-bezier(0.95,0.05,0.795,0.035)] hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500">
+            will-change-transform
+        </button>
+    </div>
+    <div class="hover:translate-x-1/2 transition">hover:translate-x-1/2</div>
+
+    <div class="flex justify-center items-center h-screen  -space-x-8">
+        <div
+            class="border-4 transition hover:-translate-y-1 hover:scale-110 hover:z-50 z-40 w-[100px] aspect-square rounded-full bg-pink-500 flex flex-col justify-center items-center">
+            05</div>
+        <div
+            class="border-4 transition hover:-translate-y-1 hover:scale-110 hover:z-50 z-30 w-[100px] aspect-square rounded-full bg-pink-500 flex flex-col justify-center items-center">
+            04</div>
+        <div
+            class="border-4 transition hover:-translate-y-1 hover:scale-110 hover:z-50 z-20 w-[100px] aspect-square rounded-full bg-pink-500 flex flex-col justify-center items-center">
+            03</div>
+        <div
+            class="border-4 transition hover:-translate-y-1 hover:scale-110 hover:z-50 z-10 w-[100px] aspect-square rounded-full bg-pink-500 flex flex-col justify-center items-center">
+            02</div>
+        <div
+            class="border-4 transition hover:-translate-y-1 hover:scale-110 hover:z-50 z-0 w-[100px] aspect-square rounded-full bg-pink-500 flex flex-col justify-center items-center">
+            01</div>
     </div>
 </template>
 <script lang="ts">

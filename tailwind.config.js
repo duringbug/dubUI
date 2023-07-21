@@ -3,7 +3,7 @@
  * @Author: 唐健峰
  * @Date: 2023-07-16 23:25:28
  * @LastEditors: ${author}
- * @LastEditTime: 2023-07-21 14:22:54
+ * @LastEditTime: 2023-07-21 15:37:34
  */
 /** @type {import('tailwindcss').Config} */
 export default {
