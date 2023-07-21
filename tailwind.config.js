@@ -3,7 +3,7 @@
  * @Author: 唐健峰
  * @Date: 2023-07-16 23:25:28
  * @LastEditors: ${author}
- * @LastEditTime: 2023-07-17 17:00:43
+ * @LastEditTime: 2023-07-21 14:22:54
  */
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -406,6 +406,7 @@ export default {
       min: 'min-content',
       max: 'max-content',
       fr: 'minmax(0, 1fr)',
+      '2fr': 'minmax(0, 2fr)',
     },
     gridAutoRows: {
       auto: 'auto',
@@ -505,6 +506,7 @@ export default {
       10: 'repeat(10, minmax(0, 1fr))',
       11: 'repeat(11, minmax(0, 1fr))',
       12: 'repeat(12, minmax(0, 1fr))',
+      my: 'repeat(3, minmax(0, 1fr)) 200px'
     },
     gridTemplateRows: {
       none: 'none',
@@ -563,6 +565,7 @@ export default {
     }),
     invert: {
       0: '0',
+      '1/3': '33.33333%',
       DEFAULT: '100%',
     },
     keyframes: {
@@ -626,6 +629,8 @@ export default {
       none: 'none',
       disc: 'disc',
       decimal: 'decimal',
+      square: 'square',
+      roman: 'upper-roman',
     },
     listStyleImage: {
       none: 'none',
@@ -703,6 +708,7 @@ export default {
       'right-bottom': 'right bottom',
       'right-top': 'right top',
       top: 'top',
+      'custom-position': '20% 30%'
     },
     opacity: {
       0: '0',
@@ -882,8 +888,18 @@ export default {
       1: '1',
       2: '2',
     },
-    supports: {},
-    data: {},
+    supports: {
+      grid: 'display: grid',
+    },
+    data: {
+      primaryColor: '#ef09ae',
+      fontSize: {
+        small: '12px',
+        medium: '16px',
+        large: '20px',
+      },
+      large: 'size~="large"',
+    },
     textColor: ({ theme }) => theme('colors'),
     textDecorationColor: ({ theme }) => theme('colors'),
     textDecorationThickness: {
