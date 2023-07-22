@@ -1,13 +1,6 @@
-<!--
- * @Description: 
- * @Author: 唐健峰
- * @Date: 2023-07-21 21:25:09
- * @LastEditors: ${author}
- * @LastEditTime: 2023-07-22 13:47:13
--->
 <template>
     <div class="w-full h-screen">
-        <div ref="info"></div>
+        <div ref="debug"></div>
     </div>
 </template>
 <script lang="ts">
@@ -16,8 +9,10 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { onBeforeRouteLeave } from "vue-router";
 import { getBox, dubBoxConfig } from '@/utils/object/BoxUtil'
-import { dubVector3Config, getVector3 } from "@/utils/object/LinesUtil";
-const info = ref<HTMLDivElement | null>(null);
+import * as dat from 'dat.gui';
+//debug
+const gui = new dat.GUI();
+const debug = ref<HTMLDivElement | null>(null);
 
 export default {
     async setup() {
@@ -26,24 +21,17 @@ export default {
             window.removeEventListener('dblclick', HandleDblclick)
         })
         onMounted(() => {
-            if (info.value) {
+            if (debug.value) {
                 if (!renderer.capabilities.isWebGL2) {
                     console.warn("WebGL is not available:", false);
                     return;
                 }
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                /**
-                 * renderer.setPixelRatio(window.devicePixelRatio) 是在使用 Three.js 进行 WebGL 渲染时的常见用法。
-                 * 它用于设置渲染器的像素比例，以适应设备的像素密度。设备的像素比例（window.devicePixelRatio）表示设备上物理像素与 CSS 像素之间的比率。
-                 * 在高分辨率屏幕上，一个 CSS 像素可能对应多个物理像素。通过设置渲染器的像素比例，可以确保渲染的图形在不同设备上具有一致的显示效果。
-                 * 例如，如果设备的像素比例为 2，那么渲染器将会以更高的物理分辨率进行渲染，并将结果缩放到 CSS 像素大小以适应屏幕。这样可以获得更锐利、更清晰的图像。
-                 * 通常情况下，你会将 setPixelRatio 设置为 window.devicePixelRatio，以便自动适应当前设备的像素密度。
-                 */
                 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-                info.value.appendChild(renderer.domElement);
+                debug.value.appendChild(renderer.domElement);
                 window.addEventListener('resize', updateSize)
                 window.addEventListener('dblclick', HandleDblclick)
-                scene.add(createManyTriangle(50))
+                scene.add(cube)
                 scene.add(cube)
                 camera.position.z = 5;
                 animate();
@@ -53,6 +41,7 @@ export default {
             window.removeEventListener('resize', updateSize)
             window.removeEventListener('dblclick', HandleDblclick)
         });
+
         //size
         const size = reactive({
             width: window.innerWidth,
@@ -87,7 +76,7 @@ export default {
         //object
         const boxConfig = {
             color: 0x00ff00,
-            wireframe: true,
+            wireframe: false,
             width: 1,
             height: 1,
             depth: 1,
@@ -95,42 +84,7 @@ export default {
             heightSegments: 2,
             depthSegments: 2
         } as dubBoxConfig
-        const lineConfig = {
-            x: 0,
-            y: 0,
-            z: 0
-        } as dubVector3Config
-        const lineConfig2 = {
-            x: 0,
-            y: 1,
-            z: 0
-        } as dubVector3Config
-        const lineConfig3 = {
-            x: 1,
-            y: 0,
-            z: 0
-        } as dubVector3Config
         const cube = await getBox(boxConfig);
-        function createManyTriangle(count: number) {
-            const geometry = new THREE.BufferGeometry();
-            const vertices = new Float32Array(count * 3 * 3)
-            const indices = [];
-            for (let i = 0; i < count * 3 * 3; i++) {
-                vertices[i] = Math.random() - 0.5
-            }
-            // 添加索引
-            for (let i = 0; i < count * 3; i += 3) {
-                indices.push(i, i + 1, i + 2);
-            }
-            geometry.setIndex(indices);
-            const positionAttribute = new THREE.Float32BufferAttribute(vertices, 3);
-            geometry.setAttribute('position', positionAttribute);
-
-            const material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });//MeshBasicMaterial:网状结构
-            const mesh = new THREE.Mesh(geometry, material); // 使用 LineLoop 保持的闭合线条
-            return mesh
-        }
-
         //controls
         const controls = new OrbitControls(camera as any, renderer.domElement)
 
@@ -150,8 +104,8 @@ export default {
             //@ts-ignore
             const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
             if (!fullscreenElement) {
-                if (info.value) {
-                    fullscreen(info.value)
+                if (debug.value) {
+                    fullscreen(debug.value)
                 }
             } else {
                 exitFullscreen()
@@ -191,7 +145,7 @@ export default {
                 document.msExitFullscreen();
             }
         }
-        return { info };
+        return { debug };
     }
 }
 </script>

@@ -1,28 +1,11 @@
-<!--
+/*
  * @Description: 
  * @Author: 唐健峰
- * @Date: 2023-07-21 21:19:48
+ * @Date: 2023-07-22 15:54:57
  * @LastEditors: ${author}
- * @LastEditTime: 2023-07-22 16:29:16
--->
-# vue3+vite+ts:threejs
-## 安装
-```bash
-npm install three @types/three
-```
-## 插件
-Three.js 开箱即用，包含 3D 引擎的基础知识。其他 Three.js 组件（例如控件、加载器和后处理效果）是addons/目录的一部分。插件不需要单独安装，但需要单独导入。
+ * @LastEditTime: 2023-07-22 16:18:08
+ */
 
-## dat.ui
-
-```bash
-npm install --save dat.gui
-```
-```bash
-npm i --save-dev @types/dat.gui
-```
-然后在根目录添加dat.gui.d.ts:(这步只是在告诉编译器已经引入),找到node_modules/@types/dat.gui里的index.d.ts文件，复制内容到dat.gui.d.ts里面
-```typescript
 export as namespace dat;
 
 export interface GUIParams {
@@ -163,12 +146,3 @@ export class GUIController<T extends object = object> {
     // FunctionController
     fire(): GUIController;
 }
-
-```
-然后就可以在相应的vue文件中引入
-```typescript
-import * as dat from 'dat.gui';
-//debug
-const gui = new dat.GUI();
-```
-
