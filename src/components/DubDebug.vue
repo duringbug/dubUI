@@ -2,6 +2,7 @@
     <div class="w-full h-screen">
         <div ref="debug"></div>
     </div>
+    <button @click="hideDebug()">debug</button>
 </template>
 <script lang="ts">
 import { ref, onMounted, watch, reactive, onBeforeUnmount } from "vue";
@@ -9,9 +10,9 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { onBeforeRouteLeave } from "vue-router";
 import { getBox, dubBoxConfig } from '@/utils/object/BoxUtil'
+import { gsap } from 'gsap'
 import * as dat from 'dat.gui';
-//debug
-const gui = new dat.GUI();
+const gui = new dat.GUI({ closed: true, width: 400 });
 const debug = ref<HTMLDivElement | null>(null);
 
 export default {
@@ -74,7 +75,7 @@ export default {
         const renderer = new THREE.WebGLRenderer();
 
         //object
-        const boxConfig = {
+        const boxConfig = reactive({
             color: 0x00ff00,
             wireframe: false,
             width: 1,
@@ -83,15 +84,28 @@ export default {
             widthSegments: 2,
             heightSegments: 2,
             depthSegments: 2
-        } as dubBoxConfig
+        }) as dubBoxConfig
+        watch(() => boxConfig.color, (newColor) => {
+            if (newColor !== undefined) {
+                cube.material.color.set(newColor)
+            }
+        });
+        watch(() => boxConfig.wireframe, (newWireframe) => {
+            if (newWireframe != undefined) {
+                cube.material.wireframe = newWireframe;
+            }
+        });
         const cube = await getBox(boxConfig);
         //controls
         const controls = new OrbitControls(camera as any, renderer.domElement)
 
         //animate
         const animate_action = function () {
-            // cube.rotation.x += 0.01;
-            // cube.rotation.y += 0.01;
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+        }
+        const animate_action_spin = function () {
+            gsap.to(cube.rotation, { duration: 1, y: cube.rotation.y + 10 })
         }
         const animate = function () {
             requestAnimationFrame(animate);
@@ -145,7 +159,40 @@ export default {
                 document.msExitFullscreen();
             }
         }
-        return { debug };
+        //debug
+        let cubeFolder = gui.addFolder('正方体');
+        cubeFolder.add(cube.position, 'x', -3, 3, 0.01)
+        cubeFolder.add(cube.position, 'y').min(-3).max(3).step(0.01)
+        cubeFolder.add(cube.position, 'z')
+            .min(-3)
+            .max(3)
+            .step(0.01)
+            .name('正方体z坐标')
+        cubeFolder
+            .add(cube, 'visible')
+            .name('显示元素')
+        cubeFolder
+            .add({ wireframe: boxConfig.wireframe }, 'wireframe')
+            .name('显示骨架')
+            .onChange((wireframe) => {
+                boxConfig.wireframe = wireframe
+            })
+        cubeFolder
+            .addColor({ color: boxConfig.color }, "color")
+            .onChange((color) => {
+                boxConfig.color = color;
+            });
+        cubeFolder
+            .add({ spin: animate_action_spin }, 'spin')
+            .name("旋转")
+        const hideDebug = function () {
+            if (gui.domElement.style.display !== 'none') {
+                gui.domElement.style.display = 'none'; // 隐藏 GUI 元素
+            } else {
+                gui.domElement.style.display = 'block'; // 显示 GUI 元素
+            }
+        }
+        return { debug, boxConfig, hideDebug };
     }
 }
 </script>
