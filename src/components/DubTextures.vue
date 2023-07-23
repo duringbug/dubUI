@@ -1,8 +1,7 @@
 <template>
     <div class="w-full h-screen">
-        <div ref="debug"></div>
+        <div ref="text"></div>
     </div>
-    <button @click="hideDebug()">debug</button>
 </template>
 <script lang="ts">
 import { ref, onMounted, watch, reactive, onBeforeUnmount } from "vue";
@@ -12,28 +11,26 @@ import { onBeforeRouteLeave } from "vue-router";
 import { getBox, dubBoxConfig } from '@/utils/object/BoxUtil'
 import { gsap } from 'gsap'
 import * as dat from 'dat.gui';
-const debug = ref<HTMLDivElement | null>(null);
+const text = ref<HTMLDivElement | null>(null);
 
 export default {
     async setup() {
         const gui = new dat.GUI({ closed: true, width: 400 });
         onBeforeRouteLeave(() => {
-            gui.close()
             window.removeEventListener('resize', updateSize)
             window.removeEventListener('dblclick', HandleDblclick)
         })
         onMounted(() => {
-            if (debug.value) {
+            if (text.value) {
                 if (!renderer.capabilities.isWebGL2) {
                     console.warn("WebGL is not available:", false);
                     return;
                 }
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-                debug.value.appendChild(renderer.domElement);
+                text.value.appendChild(renderer.domElement);
                 window.addEventListener('resize', updateSize)
                 window.addEventListener('dblclick', HandleDblclick)
-                scene.add(cube)
                 scene.add(cube)
                 camera.position.z = 5;
                 animate();
@@ -44,7 +41,10 @@ export default {
             window.removeEventListener('dblclick', HandleDblclick)
         });
 
-        //size
+        /**
+         * @size
+         */
+
         const size = reactive({
             width: window.innerWidth,
             height: window.innerHeight
@@ -61,7 +61,10 @@ export default {
             renderer.setSize(window.innerWidth, window.innerHeight);
         })
 
-        //camera
+        /**
+         * @camera
+         */
+
         const camera = new THREE.PerspectiveCamera(
             75,
             size.width / size.height,
@@ -69,22 +72,67 @@ export default {
             1000
         );
 
-        //scene
+        /**
+         * @scene
+         */
+
         const scene = new THREE.Scene();
 
-        //renderer
+        /**
+         * @renderer
+         */
+
         const renderer = new THREE.WebGLRenderer();
 
-        //object
+        /**
+         * @textures
+         */
+
+        // const wallImage = new Image()
+        // const wallTextures = new THREE.Texture(wallImage)
+
+        // wallImage.onload = function () {
+        //     wallTextures.needsUpdate = true
+        // }
+        // wallImage.src = "/src/assets/textures/wall/japanese_stone_wall_diff_4k.jpg"
+        //以上会更快些，适合做分片加载
+        const loadingManager = new THREE.LoadingManager()
+        loadingManager.onStart = function () {
+            console.log('start')
+        }
+        loadingManager.onLoad = function () {
+            console.log('load')
+        }
+        loadingManager.onProgress = function () {
+            console.log('progress')
+        }
+        loadingManager.onError = function () {
+            console.error('error')
+        }
+        const texturesLoader = new THREE.TextureLoader(loadingManager)
+        const wallDiffTextures = texturesLoader.load('/src/assets/textures/wall/japanese_stone_wall_diff_4k.jpg')
+        const wallDispTextures = texturesLoader.load('/src/assets/textures/wall/japanese_stone_wall_disp_4k.png')
+        const checkerboard = texturesLoader.load('/src/assets/textures/checkerboard-1024x1024.png')
+        const minecraft = texturesLoader.load('/src/assets/textures/minecraft.png')
+        wallDiffTextures.minFilter = THREE.NearestFilter
+        checkerboard.minFilter = THREE.NearestFilter
+        minecraft.magFilter = THREE.NearestFilter
+        minecraft.generateMipmaps = false
+
+        /**
+         * @object
+         */
+
         const boxConfig = reactive({
             color: 0x00ff00,
             wireframe: false,
-            width: 1,
-            height: 1,
-            depth: 1,
+            width: 3,
+            height: 3,
+            depth: 3,
             widthSegments: 2,
             heightSegments: 2,
-            depthSegments: 2
+            depthSegments: 2,
+            map: minecraft
         }) as dubBoxConfig
         watch(() => boxConfig.color, (newColor) => {
             if (newColor !== undefined) {
@@ -96,11 +144,23 @@ export default {
                 cube.material.wireframe = newWireframe;
             }
         });
+        watch(() => boxConfig.map, (newWireframe) => {
+            if (newWireframe != undefined) {
+                cube.material.map = newWireframe;
+            }
+        });
         const cube = await getBox(boxConfig);
-        //controls
+
+        /**
+         * @controls
+         */
+
         const controls = new OrbitControls(camera as any, renderer.domElement)
 
-        //animate
+        /**
+         * @animate
+         */
+
         const animate_action = function () {
             cube.rotation.x += 0.01;
             cube.rotation.y += 0.01;
@@ -114,13 +174,16 @@ export default {
             renderer.render(scene, camera);
         };
 
-        //dblclick
+        /**
+         * @dblclick
+         */
+
         const HandleDblclick = function () {
             //@ts-ignore
             const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
             if (!fullscreenElement) {
-                if (debug.value) {
-                    fullscreen(debug.value)
+                if (text.value) {
+                    fullscreen(text.value)
                 }
             } else {
                 exitFullscreen()
@@ -160,7 +223,11 @@ export default {
                 document.msExitFullscreen();
             }
         }
-        //debug
+
+        /**
+         * @debug
+         */
+
         let cubeFolder = gui.addFolder('正方体');
         cubeFolder.add(cube.position, 'x', -3, 3, 0.01)
         cubeFolder.add(cube.position, 'y').min(-3).max(3).step(0.01)
@@ -186,14 +253,21 @@ export default {
         cubeFolder
             .add({ spin: animate_action_spin }, 'spin')
             .name("旋转")
-        const hideDebug = function () {
-            if (gui.domElement.style.display !== 'none') {
-                gui.domElement.style.display = 'none'; // 隐藏 GUI 元素
-            } else {
-                gui.domElement.style.display = 'block'; // 显示 GUI 元素
-            }
-        }
-        return { debug, boxConfig, hideDebug };
+        cubeFolder
+            .add({ Option1: "材质一", Option2: "材质二", Option3: "材质三", Option4: "材质四" }, 'Option2', { "材质一": "wallDiffTextures", "材质二": "wallDispTextures", "材质三": "checkerboard", "材质四": "minecraft" })
+            .name('材质')
+            .onChange(function (value) {
+                if (value == "wallDiffTextures") {
+                    boxConfig.map = wallDiffTextures
+                } else if (value == 'wallDispTextures') {
+                    boxConfig.map = wallDispTextures
+                } else if (value == "checkerboard") {
+                    boxConfig.map = checkerboard
+                } else if (value == "minecraft") {
+                    boxConfig.map = minecraft
+                }
+            })
+        return { text, boxConfig };
     }
 }
 </script>

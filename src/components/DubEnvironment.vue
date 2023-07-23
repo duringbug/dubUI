@@ -1,41 +1,37 @@
 <template>
     <div class="w-full h-screen">
-        <div ref="debug"></div>
+        <div ref="environment"></div>
     </div>
-    <button @click="hideDebug()">debug</button>
 </template>
 <script lang="ts">
 import { ref, onMounted, watch, reactive, onBeforeUnmount } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { onBeforeRouteLeave } from "vue-router";
-import { getBox, dubBoxConfig } from '@/utils/object/BoxUtil'
-import { gsap } from 'gsap'
 import * as dat from 'dat.gui';
-const debug = ref<HTMLDivElement | null>(null);
+const environment = ref<HTMLDivElement | null>(null);
 
 export default {
     async setup() {
         const gui = new dat.GUI({ closed: true, width: 400 });
         onBeforeRouteLeave(() => {
-            gui.close()
             window.removeEventListener('resize', updateSize)
             window.removeEventListener('dblclick', HandleDblclick)
         })
         onMounted(() => {
-            if (debug.value) {
+            if (environment.value) {
                 if (!renderer.capabilities.isWebGL2) {
                     console.warn("WebGL is not available:", false);
                     return;
                 }
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-                debug.value.appendChild(renderer.domElement);
+                environment.value.appendChild(renderer.domElement);
                 window.addEventListener('resize', updateSize)
                 window.addEventListener('dblclick', HandleDblclick)
-                scene.add(cube)
-                scene.add(cube)
-                camera.position.z = 5;
+                scene.add(sphere)
+                scene.add(plane)
+                scene.add(torus)
+                scene.add(pointLight)
+                scene.add(ambientLight)
                 animate();
             }
         });
@@ -44,7 +40,10 @@ export default {
             window.removeEventListener('dblclick', HandleDblclick)
         });
 
-        //size
+        /**
+         * @size
+         */
+
         const size = reactive({
             width: window.innerWidth,
             height: window.innerHeight
@@ -61,66 +60,109 @@ export default {
             renderer.setSize(window.innerWidth, window.innerHeight);
         })
 
-        //camera
+        /**
+         * @camera
+         */
+
         const camera = new THREE.PerspectiveCamera(
-            75,
+            45,
             size.width / size.height,
             0.1,
             1000
         );
+        camera.position.z = 5;
 
-        //scene
+        /**
+         * @scene
+         */
+
         const scene = new THREE.Scene();
 
-        //renderer
-        const renderer = new THREE.WebGLRenderer();
+        /**
+         * @renderer
+         */
 
-        //object
-        const boxConfig = reactive({
-            color: 0x00ff00,
-            wireframe: false,
-            width: 1,
-            height: 1,
-            depth: 1,
-            widthSegments: 2,
-            heightSegments: 2,
-            depthSegments: 2
-        }) as dubBoxConfig
-        watch(() => boxConfig.color, (newColor) => {
-            if (newColor !== undefined) {
-                cube.material.color.set(newColor)
-            }
-        });
-        watch(() => boxConfig.wireframe, (newWireframe) => {
-            if (newWireframe != undefined) {
-                cube.material.wireframe = newWireframe;
-            }
-        });
-        const cube = await getBox(boxConfig);
-        //controls
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+        /**
+         * @textures
+         */
+
+        const loadingManager = new THREE.LoadingManager()
+        loadingManager.onStart = function () {
+            console.log('start')
+        }
+        loadingManager.onLoad = function () {
+            console.log('load')
+        }
+        loadingManager.onProgress = function () {
+            console.log('progress')
+        }
+        loadingManager.onError = function () {
+            console.error('error')
+        }
+
+        /**
+         * @object
+         */
+
+
+        /**
+         * @materials
+         */
+
+        const basicMaterial = new THREE.MeshStandardMaterial();//标准型
+        basicMaterial.metalness = 0.31//金属性
+        basicMaterial.roughness = 0.52//光泽性
+        const sphere = new THREE.Mesh(new THREE.SphereGeometry(2, 16, 16), basicMaterial)
+        const plane = new THREE.Mesh(new THREE.PlaneGeometry(4, 4, 64, 64), basicMaterial)
+        console.log(plane.geometry.attributes)
+        plane.geometry.setAttribute('uv2', new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2))
+        const torus = new THREE.Mesh(new THREE.TorusGeometry(1.8, 0.6, 16, 32), basicMaterial)
+        sphere.position.x = -6
+        torus.position.x = 6
+
+        /**
+         * @lights
+         */
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+        const pointLight = new THREE.PointLight(0xffffff, 0.5)
+        ambientLight.position.set(0, 0, 5)
+        pointLight.position.set(0, 0, 5)
+
+        /**
+         * @controls
+         */
+
         const controls = new OrbitControls(camera as any, renderer.domElement)
 
-        //animate
+        /**
+         * @animate
+         */
+
         const animate_action = function () {
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
         }
-        const animate_action_spin = function () {
-            gsap.to(cube.rotation, { duration: 1, y: cube.rotation.y + 10 })
-        }
+        const clock = new THREE.Clock()
         const animate = function () {
+            const elapsedTime = clock.getElapsedTime()
+
             requestAnimationFrame(animate);
             animate_action()
             renderer.render(scene, camera);
         };
 
-        //dblclick
+        /**
+         * @dblclick
+         */
+
         const HandleDblclick = function () {
             //@ts-ignore
             const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
             if (!fullscreenElement) {
-                if (debug.value) {
-                    fullscreen(debug.value)
+                if (environment.value) {
+                    fullscreen(environment.value)
                 }
             } else {
                 exitFullscreen()
@@ -156,44 +198,35 @@ export default {
                 document.webkitExitFullscreen();
                 //@ts-ignore
             } else if (document.msExitFullscreen) { // 兼容 IE/Edge
-                //@ts-ignore
+                //@ts-ignore 
                 document.msExitFullscreen();
             }
         }
-        //debug
-        let cubeFolder = gui.addFolder('正方体');
-        cubeFolder.add(cube.position, 'x', -3, 3, 0.01)
-        cubeFolder.add(cube.position, 'y').min(-3).max(3).step(0.01)
-        cubeFolder.add(cube.position, 'z')
-            .min(-3)
-            .max(3)
-            .step(0.01)
-            .name('正方体z坐标')
-        cubeFolder
-            .add(cube, 'visible')
-            .name('显示元素')
-        cubeFolder
-            .add({ wireframe: boxConfig.wireframe }, 'wireframe')
-            .name('显示骨架')
-            .onChange((wireframe) => {
-                boxConfig.wireframe = wireframe
-            })
-        cubeFolder
-            .addColor({ color: boxConfig.color }, "color")
-            .onChange((color) => {
-                boxConfig.color = color;
-            });
-        cubeFolder
-            .add({ spin: animate_action_spin }, 'spin')
-            .name("旋转")
-        const hideDebug = function () {
-            if (gui.domElement.style.display !== 'none') {
-                gui.domElement.style.display = 'none'; // 隐藏 GUI 元素
-            } else {
-                gui.domElement.style.display = 'block'; // 显示 GUI 元素
-            }
-        }
-        return { debug, boxConfig, hideDebug };
+
+        /**
+         * @helper
+         */
+        const axesHelper = new THREE.AxesHelper(5); // 参数表示坐标轴的长度
+
+        /**
+         * @debug
+         */
+
+        const materialFolder = gui.addFolder('材质')
+        materialFolder
+            .add(sphere, 'visible')
+            .name("sphere显示元素")
+        materialFolder
+            .add(plane, 'visible')
+            .name("plane显示元素")
+        materialFolder
+            .add(torus, 'visible')
+            .name("torus显示元素")
+        materialFolder
+            .add(basicMaterial, 'metalness', 0, 1, 0.01)
+        materialFolder
+            .add(basicMaterial, 'roughness', 0, 3, 0.01)
+        return { environment };
     }
 }
 </script>

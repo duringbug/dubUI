@@ -229,3 +229,5 @@ app.mount('#app')
 现在就是一个基本完整的vue3+vite+ts的开发环境了
 
 ![文件结构](https://1.15.222.76:9090/img/demo01.png)
+
+## [threejs](./threejs.md)
