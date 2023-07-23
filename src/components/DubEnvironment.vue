@@ -86,6 +86,20 @@ export default {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+
+        /**
+         * @environment
+         */
+        const cubeTextureLoader = new THREE.CubeTextureLoader()
+        const environmentMapTexture = cubeTextureLoader.load([
+            'src/assets/textures/environmentMaps/4/px.jpg',
+            'src/assets/textures/environmentMaps/4/nx.jpg',
+            'src/assets/textures/environmentMaps/4/py.jpg',
+            'src/assets/textures/environmentMaps/4/ny.jpg',
+            'src/assets/textures/environmentMaps/4/pz.jpg',
+            'src/assets/textures/environmentMaps/4/nz.jpg'
+        ])
+
         /**
          * @textures
          */
@@ -114,11 +128,11 @@ export default {
          */
 
         const basicMaterial = new THREE.MeshStandardMaterial();//标准型
-        basicMaterial.metalness = 0.31//金属性
-        basicMaterial.roughness = 0.52//光泽性
+        basicMaterial.envMap = environmentMapTexture
+        basicMaterial.metalness = 1//金属性
+        basicMaterial.roughness = 0//光泽性
         const sphere = new THREE.Mesh(new THREE.SphereGeometry(2, 16, 16), basicMaterial)
         const plane = new THREE.Mesh(new THREE.PlaneGeometry(4, 4, 64, 64), basicMaterial)
-        console.log(plane.geometry.attributes)
         plane.geometry.setAttribute('uv2', new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2))
         const torus = new THREE.Mesh(new THREE.TorusGeometry(1.8, 0.6, 16, 32), basicMaterial)
         sphere.position.x = -6

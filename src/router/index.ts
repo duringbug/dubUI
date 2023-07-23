@@ -3,7 +3,7 @@
  * @Author: 唐健峰
  * @Date: 2023-07-16 23:11:38
  * @LastEditors: ${author}
- * @LastEditTime: 2023-07-23 17:48:01
+ * @LastEditTime: 2023-07-23 20:39:05
  */
 import { createRouter, createWebHistory } from 'vue-router'
 import App from '@/App.vue'
@@ -12,6 +12,7 @@ import DubDebug from '@/components/DubDebug.vue'
 import DubTextures from '@/components/DubTextures.vue'
 import DubMaterials from '@/components/DubMaterals.vue'
 import DubEnvironment from '@/components/DubEnvironment.vue'
+import DubText from '@/components/DubText.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -45,6 +46,11 @@ const router = createRouter({
       path: "/environment",
       name: "Environment",
       component: DubEnvironment,
+    },
+    {
+      path: "/text",
+      name: "Text",
+      component: DubText,
     },
   ]
 })
