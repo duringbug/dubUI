@@ -94,7 +94,7 @@ export default {
          * @textures
          */
         const textureLoader = new THREE.TextureLoader()
-        const matcapTexture = textureLoader.load("src/assets/textures/matcaps/01.png")
+        const matcapTexture = textureLoader.load("/textures/matcaps/01.png")
 
 
         /**
@@ -102,7 +102,7 @@ export default {
          */
         const fontLoader = new FontLoader()
         fontLoader.load(
-            "src/assets/font/json/尔雅正黑.json",
+            "/font/json/尔雅正黑.json",
             HandleFontLoad
         )
 

@@ -5,7 +5,7 @@
  * @LastEditors: ${author}
 import { RouterView } from 'vue-router';
 import { RouterView } from 'vue-router';
- * @LastEditTime: 2023-07-22 01:18:28
+ * @LastEditTime: 2023-07-24 12:04:13
 -->
 <template>
     <Suspense>
@@ -24,6 +24,11 @@ export default {
     components: {
         Info,
         RouterView,
+    },
+    methods: {
+        toText() {
+            this.$router.push('/text')
+        }
     }
 }
 

@@ -3,7 +3,7 @@
  * @Author: 唐健峰
  * @Date: 2023-07-21 21:25:09
  * @LastEditors: ${author}
- * @LastEditTime: 2023-07-22 13:47:13
+ * @LastEditTime: 2023-07-24 11:58:51
 -->
 <template>
     <div class="w-full h-screen">
@@ -15,8 +15,8 @@ import { ref, onMounted, watch, reactive, onBeforeUnmount } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { onBeforeRouteLeave } from "vue-router";
-import { getBox, dubBoxConfig } from '@/utils/object/BoxUtil'
-import { dubVector3Config, getVector3 } from "@/utils/object/LinesUtil";
+import { getBox, dubBoxConfig } from '../utils/object/BoxUtil'
+import { dubVector3Config, getVector3 } from "../utils/object/LinesUtil";
 const info = ref<HTMLDivElement | null>(null);
 
 export default {
@@ -119,7 +119,7 @@ export default {
                 vertices[i] = Math.random() - 0.5
             }
             // 添加索引
-            for (let i = 0; i < count * 3; i += 3) {
+            for (let i = 0 as number; i < count * 3; i += 3) {
                 indices.push(i, i + 1, i + 2);
             }
             geometry.setIndex(indices);

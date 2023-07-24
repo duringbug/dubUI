@@ -9,7 +9,7 @@ import { ref, onMounted, watch, reactive, onBeforeUnmount } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { onBeforeRouteLeave } from "vue-router";
-import { getBox, dubBoxConfig } from '@/utils/object/BoxUtil'
+import { getBox, dubBoxConfig } from '../utils/object/BoxUtil'
 import { gsap } from 'gsap'
 import * as dat from 'dat.gui';
 const debug = ref<HTMLDivElement | null>(null);

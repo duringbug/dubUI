@@ -8,7 +8,7 @@ import { ref, onMounted, watch, reactive, onBeforeUnmount } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { onBeforeRouteLeave } from "vue-router";
-import { getBox, dubBoxConfig } from '@/utils/object/BoxUtil'
+import { getBox, dubBoxConfig } from '../utils/object/BoxUtil'
 import { gsap } from 'gsap'
 import * as dat from 'dat.gui';
 const material = ref<HTMLDivElement | null>(null);
@@ -107,12 +107,12 @@ export default {
         }
         const texturesLoader = new THREE.TextureLoader(loadingManager)
         //通过手机黑白曝光可以形成初步的aoMap
-        const wallDiffTextures = texturesLoader.load('/src/assets/textures/wall/japanese_stone_wall_diff_4k.jpg')
-        const wallDiffTexturesShadow = texturesLoader.load('/src/assets/textures/wall/japanese_stone_wall_diff_4k_shadow.jpg')
-        const wallDiffTexturesNormal = texturesLoader.load('/src/assets/textures/wall/japanese_stone_wall_diff_4k_normal.png')
-        const wallDiffTexturesAlpha = texturesLoader.load('src/assets/textures/door/alpha.jpg')
-        const wallDispTextures = texturesLoader.load('/src/assets/textures/wall/japanese_stone_wall_disp_4k.png')
-        const wallDispTexturesShadow = texturesLoader.load('/src/assets/textures/wall/japanese_stone_wall_disp_4k_shadow.jpg')
+        const wallDiffTextures = texturesLoader.load('/textures/wall/japanese_stone_wall_diff_4k.jpg')
+        const wallDiffTexturesShadow = texturesLoader.load('/textures/wall/japanese_stone_wall_diff_4k_shadow.jpg')
+        const wallDiffTexturesNormal = texturesLoader.load('/textures/wall/japanese_stone_wall_diff_4k_normal.png')
+        const wallDiffTexturesAlpha = texturesLoader.load('/textures/door/alpha.jpg')
+        const wallDispTextures = texturesLoader.load('/textures/wall/japanese_stone_wall_disp_4k.png')
+        const wallDispTexturesShadow = texturesLoader.load('/textures/wall/japanese_stone_wall_disp_4k_shadow.jpg')
 
 
         /**

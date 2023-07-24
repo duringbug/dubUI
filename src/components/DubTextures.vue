@@ -8,7 +8,7 @@ import { ref, onMounted, watch, reactive, onBeforeUnmount } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { onBeforeRouteLeave } from "vue-router";
-import { getBox, dubBoxConfig } from '@/utils/object/BoxUtil'
+import { getBox, dubBoxConfig } from '../utils/object/BoxUtil'
 import { gsap } from 'gsap'
 import * as dat from 'dat.gui';
 const text = ref<HTMLDivElement | null>(null);
@@ -110,10 +110,10 @@ export default {
             console.error('error')
         }
         const texturesLoader = new THREE.TextureLoader(loadingManager)
-        const wallDiffTextures = texturesLoader.load('/src/assets/textures/wall/japanese_stone_wall_diff_4k.jpg')
-        const wallDispTextures = texturesLoader.load('/src/assets/textures/wall/japanese_stone_wall_disp_4k.png')
-        const checkerboard = texturesLoader.load('/src/assets/textures/checkerboard-1024x1024.png')
-        const minecraft = texturesLoader.load('/src/assets/textures/minecraft.png')
+        const wallDiffTextures = texturesLoader.load('/textures/wall/japanese_stone_wall_diff_4k.jpg')
+        const wallDispTextures = texturesLoader.load('/textures/wall/japanese_stone_wall_disp_4k.png')
+        const checkerboard = texturesLoader.load('/textures/checkerboard-1024x1024.png')
+        const minecraft = texturesLoader.load('/textures/minecraft.png')
         wallDiffTextures.minFilter = THREE.NearestFilter
         checkerboard.minFilter = THREE.NearestFilter
         minecraft.magFilter = THREE.NearestFilter

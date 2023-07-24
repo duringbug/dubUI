@@ -20,9 +20,11 @@ coverage
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+.vercel/*
 .idea
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+.vercel

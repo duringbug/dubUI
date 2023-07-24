@@ -9,6 +9,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { onBeforeRouteLeave } from "vue-router";
 import * as dat from 'dat.gui';
+
 const environment = ref<HTMLDivElement | null>(null);
 
 export default {
@@ -92,13 +93,20 @@ export default {
          */
         const cubeTextureLoader = new THREE.CubeTextureLoader()
         const environmentMapTexture = cubeTextureLoader.load([
-            'src/assets/textures/environmentMaps/4/px.jpg',
-            'src/assets/textures/environmentMaps/4/nx.jpg',
-            'src/assets/textures/environmentMaps/4/py.jpg',
-            'src/assets/textures/environmentMaps/4/ny.jpg',
-            'src/assets/textures/environmentMaps/4/pz.jpg',
-            'src/assets/textures/environmentMaps/4/nz.jpg'
+            '/textures/environmentMaps/4/px.jpg',
+            '/textures/environmentMaps/4/nx.jpg',
+            '/textures/environmentMaps/4/py.jpg',
+            '/textures/environmentMaps/4/ny.jpg',
+            '/textures/environmentMaps/4/pz.jpg',
+            '/textures/environmentMaps/4/nz.jpg'
         ])
+        // const environmentMapTexture = cubeTextureLoader.load([
+        //     px,
+        //     nx,
+        //     py,
+        //     ny,
+        //     nz
+        // ])
 
         /**
          * @textures
