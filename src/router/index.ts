@@ -3,7 +3,7 @@
  * @Author: 唐健峰
  * @Date: 2023-07-16 23:11:38
  * @LastEditors: ${author}
- * @LastEditTime: 2023-07-24 22:51:36
+ * @LastEditTime: 2023-07-29 11:28:22
  */
 import { createRouter, createWebHistory } from 'vue-router'
 import App from '@/App.vue'
@@ -14,6 +14,8 @@ import DubMaterials from '@/components/DubMaterals.vue'
 import DubEnvironment from '@/components/DubEnvironment.vue'
 import DubText from '@/components/DubText.vue'
 import DubLight from '@/components/DubLight.vue'
+import DubShadow from "@/components/DubShadow.vue"
+import DubHouse from "@/components/DubHouse.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -57,6 +59,16 @@ const router = createRouter({
       path: "/light",
       name: "Light",
       component: DubLight,
+    },
+    {
+      path: "/shadow",
+      name: "Shadow",
+      component: DubShadow,
+    },
+    {
+      path: "/house",
+      name: "House",
+      component: DubHouse,
     },
   ]
 })

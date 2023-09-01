@@ -28,3 +28,4 @@ coverage
 *.sln
 *.sw?
 .vercel
+._.DS_Store
