@@ -28,8 +28,8 @@ export default {
                 house.value.appendChild(renderer.domElement);
                 window.addEventListener('resize', updateSize)
                 window.addEventListener('dblclick', HandleDblclick)
-                scene.add(plane)
                 scene.add(houseGroup)
+                scene.add(plane)
 
                 // scene.add(directionalLight)
                 // scene.add(pointLight)
@@ -75,6 +75,8 @@ export default {
             0.1,
             1000
         );
+        camera.far = 2000; // 设置远裁剪平面的距离
+        camera.updateProjectionMatrix(); // 更新相机的投影矩阵
         camera.position.set(0, -160, 140)
 
         /**
@@ -109,9 +111,16 @@ export default {
 
         const grassTexture = textureLoader.load("/textures/grass/grass2/baseColor.jpg")
         const aoMapGrassTexture = textureLoader.load("/textures/grass/grass2/ambientOcclusion.jpg")
-        const heightGrassTexture = textureLoader.load("/textures/grass/grass2/height.jpg")
+        const heightGrassTexture = textureLoader.load("/textures/grass/grass2/height.png")
         const normalGrassTexture = textureLoader.load("/textures/grass/grass2/normal.jpg")
         const roughnessGrassTexture = textureLoader.load("/textures/grass/grass2/roughness.jpg")
+
+
+        const wallTexture = textureLoader.load("/textures/wall/Wall_Stone_023_BaseColor.jpg")
+        const aoMapWallTexture = textureLoader.load("/textures/wall/Wall_Stone_023_AmbientOcclusion.jpg")
+        const heightWallTexture = textureLoader.load("/textures/wall/Wall_Stone_023_Height.png")
+        const normalWallTexture = textureLoader.load("/textures/wall/Wall_Stone_023_Normal.jpg")
+        const roughnessWallTexture = textureLoader.load("/textures/wall/Wall_Stone_023_Roughness.jpg")
 
         /**
          * @object
@@ -119,46 +128,116 @@ export default {
         const houseGroup = new THREE.Group()
         const wall_down = new THREE.Mesh(
             new THREE.BoxGeometry(140, 140, 5),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const wall_down1 = new THREE.Mesh(
             new THREE.BoxGeometry(20, 20, 5),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const wall_up = new THREE.Mesh(
             new THREE.BoxGeometry(120, 120, 5),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         wall_down.position.z = 2.5
         wall_up.position.z = 2.5 + 60
         wall_down1.position.set(0, -70, 2.5)
         const wall1 = new THREE.Mesh(
             new THREE.BoxGeometry(10, 120, 60),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const wall2 = new THREE.Mesh(
             new THREE.BoxGeometry(10, 120, 60),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const wall3 = new THREE.Mesh(
             new THREE.BoxGeometry(100, 10, 60),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const wall4 = new THREE.Mesh(
             new THREE.BoxGeometry(35, 10, 60),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const wall5 = new THREE.Mesh(
             new THREE.BoxGeometry(35, 10, 60),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const wall6 = new THREE.Mesh(
             new THREE.BoxGeometry(10, 20, 60),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const wall7 = new THREE.Mesh(
             new THREE.BoxGeometry(10, 20, 60),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const roof1 = new THREE.Mesh(
             new THREE.ConeGeometry(30, 20, 4),
@@ -170,11 +249,25 @@ export default {
         )
         const wall8 = new THREE.Mesh(
             new THREE.BoxGeometry(20, 1, 15),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const door = new THREE.Mesh(
             new THREE.BoxGeometry(20, 1, 40),
-            new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+            new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                aoMap: aoMapWallTexture,
+                displacementMap: heightWallTexture,
+                displacementScale: 0.1,
+                normalMap: normalWallTexture,
+                roughnessMap: roughnessWallTexture
+            })
         )
         const doorFace = new THREE.Mesh(
             new THREE.PlaneGeometry(35, 35, 10, 10),
@@ -201,10 +294,10 @@ export default {
         wall3.position.y = 60 - 5
         wall4.position.x = -35
         wall4.position.z = 30 + 2.5
-        wall4.position.y = -60 + 5
+        wall4.position.y = -60 + 5 + 1
         wall5.position.x = 35
         wall5.position.z = 30 + 2.5
-        wall5.position.y = -60 + 5
+        wall5.position.y = -60 + 5 + 1
         wall6.position.set(-15, -70, 30)
         wall7.position.set(15, -70, 30)
         roof1.rotateX(Math.PI / 2)
@@ -229,6 +322,22 @@ export default {
 
 
 
+        grassTexture.repeat.set(8, 8)
+        grassTexture.wrapS = THREE.RepeatWrapping
+        grassTexture.wrapT = THREE.RepeatWrapping
+        aoMapGrassTexture.repeat.set(8, 8)
+        aoMapGrassTexture.wrapS = THREE.RepeatWrapping
+        aoMapGrassTexture.wrapT = THREE.RepeatWrapping
+        heightGrassTexture.repeat.set(8, 8)
+        heightGrassTexture.wrapS = THREE.RepeatWrapping
+        heightGrassTexture.wrapT = THREE.RepeatWrapping
+        normalGrassTexture.repeat.set(8, 8)
+        normalGrassTexture.wrapS = THREE.RepeatWrapping
+        normalGrassTexture.wrapT = THREE.RepeatWrapping
+        roughnessGrassTexture.repeat.set(8, 8)
+        roughnessGrassTexture.wrapS = THREE.RepeatWrapping
+        roughnessGrassTexture.wrapT = THREE.RepeatWrapping
+
         const plane = new THREE.Mesh(
             new THREE.PlaneGeometry(500, 500),
             new THREE.MeshStandardMaterial({
@@ -240,8 +349,11 @@ export default {
                 roughnessMap: roughnessGrassTexture
             })
         )
+        plane.geometry.setAttribute(
+            'uv2',
+            new THREE.Float32BufferAttribute(plane.geometry.attributes.uv.array, 2)
+        )
 
-        plane.geometry.setAttribute('uv2', new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2))
 
         /**
          * @lights
